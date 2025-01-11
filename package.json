@@ -1,0 +1,40 @@
+{
+    "name": "@gouvernathor/rng",
+    "version": "1.0.0",
+    "description": "A deterministic and reseedable random number generator, resembling (but not with the same API as) Python's Random.",
+    "type": "module",
+    "main": "RNG.js",
+    "types": "RNG.d.ts",
+    "exports": {
+      ".": {
+        "import": {
+          "types": "./dist/RNG.d.ts",
+          "default": "./dist/RNG.js"
+        }
+      }
+    },
+    "files": [
+      "dist"
+    ],
+    "scripts": {
+      "build": "tsup",
+      "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "repository": {
+      "type": "git",
+      "url": "git+https://github.com/Gouvernathor/rng-ts.git"
+    },
+    "keywords": [
+      "rng"
+    ],
+    "author": "Gouvernathor",
+    "license": "ISC",
+    "bugs": {
+      "url": "https://github.com/Gouvernathor/rng-ts/issues"
+    },
+    "homepage": "https://github.com/Gouvernathor/rng-ts#readme",
+    "devDependencies": {
+      "typescript": "*",
+      "tsup": "^8.3.5"
+    }
+  }
