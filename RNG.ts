@@ -3,24 +3,20 @@ import hashString from "./hashString";
 import MersenneTwister from "./lib/mersenne-twister";
 export { MersenneTwister };
 
+const M = 0x80000000; // 2**31
+const A = 1103515245;
+const C = 12345;
+
 /**
  * Deterministic and reseedable RNG with utility methods
  */
 export default class RNG extends AbstractRNG {
-    readonly #m: number;
-    readonly #a: number;
-    readonly #c: number;
     #state!: number;
     /**
      * @param seed integer between 0 and 2^31 - 1 ; if not passed, generates it from Math.random()
      */
     constructor(seed?: number | string) {
         super();
-        // LCG using GCC's constants
-        this.#m = 0x80000000; // 2**31;
-        this.#a = 1103515245;
-        this.#c = 12345;
-
         this.seed = seed;
     }
     /**
@@ -28,7 +24,7 @@ export default class RNG extends AbstractRNG {
      */
     set seed(seed: number | string | undefined) {
         if (seed === undefined) {
-            this.#state = Math.floor(Math.random() * (this.#m - 1));
+            this.#state = Math.floor(Math.random() * (M - 1));
         } else {
             if (typeof seed === "string") {
                 seed = hashString(seed);
@@ -40,14 +36,14 @@ export default class RNG extends AbstractRNG {
      * @returns a number presumably in [[0, 2**31[[
      */
     randInt() {
-        this.#state = (this.#a * this.#state + this.#c) % this.#m;
+        this.#state = (A * this.#state + C) % M;
         return this.#state;
     }
     /**
      * @returns a number in [0, 1[
      */
     random() {
-        return this.randInt() / this.#m;
+        return this.randInt() / M;
     }
 
     static MT = MersenneTwister;
