@@ -37,8 +37,7 @@ export default class RNG extends AbstractRNG {
      * @returns a number presumably in [[0, 2**31[[
      */
     randInt() {
-        this.#state = (A * this.#state + C) % M;
-        return this.#state;
+        return this.#state = (A * this.#state + C) % M;
     }
     /**
      * @returns a number in [0, 1[

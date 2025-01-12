@@ -1,7 +1,7 @@
 import AbstractRNG from "../abstract";
 import hashString from "../hashString";
 
-export default class MersenneTwister extends AbstractRNG{
+export default class MersenneTwister extends AbstractRNG {
     #index!: number;
     readonly #state: number[] = Array(624);
 
