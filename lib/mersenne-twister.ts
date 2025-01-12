@@ -2,15 +2,20 @@ import AbstractRNG from "../abstract";
 import hashString from "../hashString";
 
 export default class MersenneTwister extends AbstractRNG{
-    #index = 0;
+    #index!: number;
     readonly #state: number[] = Array(624);
 
     constructor(seed?: number|string) {
         super();
+        this.seed = seed;
+    }
 
+    set seed(seed: number | string | undefined) {
         if (typeof seed === "string") {
             seed = hashString(seed);
         }
+
+        this.#index = 0;
 
         const state = this.#state;
 

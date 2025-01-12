@@ -1,5 +1,11 @@
+/**
+ * The constructor should take one single optional string or number parameter, as a seed
+ * to be set with the seed setter.
+ * (This can't be represented in an abstract class.)
+ */
 export default abstract class AbstractRNG {
     abstract random(): number;
+    abstract set seed(seed: number | string | undefined);
 
     /**
      * @returns a number in [[min, max[[
