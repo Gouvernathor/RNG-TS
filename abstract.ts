@@ -44,7 +44,8 @@ export default abstract class AbstractRNG {
      * It reseeds at every generation.
      */
     *weightedChoicesGenerator<T>(array: ReadonlyArray<T>, weights: ReadonlyArray<number>) {
-        const cumWeights = weights.map((w, i) => weights.slice(0, i + 1).reduce((a, b) => a + b, 0));
+        let accu = 0;
+        const cumWeights = weights.map(w => (accu += w));
         const maxCumWeight = cumWeights[cumWeights.length - 1];
         while (true) {
             const rand = this.random() * maxCumWeight;
