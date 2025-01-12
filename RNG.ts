@@ -1,7 +1,8 @@
 import AbstractRNG from "./abstract";
 import hashString from "./hashString";
 import MersenneTwister from "./lib/mersenne-twister";
-export { MersenneTwister };
+import ParkMiller from "./lib/park-miller";
+export { MersenneTwister, ParkMiller };
 
 const M = 0x80000000; // 2**31
 const A = 1103515245;
@@ -47,4 +48,5 @@ export default class RNG extends AbstractRNG {
     }
 
     static MT = MersenneTwister;
+    static PM = ParkMiller;
 }
