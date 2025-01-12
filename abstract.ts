@@ -1,4 +1,4 @@
-export abstract class AbstractRNG {
+export default abstract class AbstractRNG {
     abstract random(): number;
 
     /**
