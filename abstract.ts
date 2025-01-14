@@ -2,6 +2,8 @@
  * The constructor should take one single optional string or number parameter, as a seed
  * to be set with the seed setter.
  * (This can't be represented in an abstract class.)
+ * The seed property is set-only, it can't be read except on particular subclasses.
+ * (A limitation of TypeScript makes that limitation not visible in the type system.)
  */
 export default abstract class AbstractRNG {
     abstract random(): number;
