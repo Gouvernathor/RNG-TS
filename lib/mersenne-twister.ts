@@ -3,7 +3,6 @@ import hashString from "../hashString";
 
 // magics
 const _624 = 624;
-const _397 = 397;
 
 export default class MersenneTwister extends AbstractRNG {
     #index!: number;
@@ -39,11 +38,11 @@ export default class MersenneTwister extends AbstractRNG {
         if (this.#index >= _624) {
             for (let i = 0; i < _624; i++) {
                 // Bit 31 (32nd bit) of state[i]
-                let y = (state[i] & 0x80000000);
+                let y = (state[i] & 0x80000000)
                 // Bits 0-30 (first 31 bits) of state[...]
-                y += (state[(i+1) % _624] & 0x7fffffff);
+                      + (state[(i+1) % _624] & 0x7fffffff);
                 // The new pseudo random number
-                state[i] = state[(i + _397) % _624] ^ (y >>> 1);
+                state[i] = state[(i + 397) % _624] ^ (y >>> 1);
                 if (y % 2 !== 0) { // y is odd
                     state[i] ^= 0x9908b0df; // 2567483615
                 }
