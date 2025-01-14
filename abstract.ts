@@ -26,20 +26,6 @@ export default abstract class AbstractRNG {
         return array[this.randRange(0, array.length)];
     }
     /**
-     * Picks k elements from the array with replacement.
-     * This reseeds k times, not 1 time.
-     * @param k number of elements to choose
-     * @param weights if provided, the probability of each element to be chosen
-     */
-    choices<T>(array: ReadonlyArray<T>, { k, weights }: { k: number, weights?: ReadonlyArray<number> }): T[] {
-        if (weights === undefined) {
-            return Array.from({length: k}, () => this.choice(array));
-        } else {
-            const gen = this.weightedChoicesGenerator(array, weights);
-            return Array.from({length: k}, () => gen.next().value!);
-        }
-    }
-    /**
      * Warning: this generator is infinite.
      * It reseeds at every generation.
      */
@@ -51,6 +37,20 @@ export default abstract class AbstractRNG {
             const rand = this.random() * maxCumWeight;
             const idx = cumWeights.findIndex(w => w > rand);
             yield array[idx];
+        }
+    }
+    /**
+     * Picks k elements from the array with replacement.
+     * This reseeds k times, not 1 time.
+     * @param k number of elements to choose
+     * @param weights if provided, the probability of each element to be chosen
+     */
+    choices<T>(array: ReadonlyArray<T>, { k, weights }: { k: number, weights?: ReadonlyArray<number> }): T[] {
+        if (weights === undefined) {
+            return Array.from({length: k}, () => this.choice(array));
+        } else {
+            const gen = this.weightedChoicesGenerator(array, weights);
+            return Array.from({length: k}, () => gen.next().value!);
         }
     }
     /**
