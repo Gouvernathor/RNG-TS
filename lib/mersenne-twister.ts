@@ -48,6 +48,7 @@ export default class MersenneTwister extends AbstractRNG {
                     state[i] ^= 0x9908b0df; // 2567483615
                 }
             }
+            this.#index = 0;
         }
 
         let y = state[this.#index++];
