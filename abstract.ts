@@ -8,16 +8,24 @@ export default abstract class AbstractRNG {
     abstract set seed(seed: number | string | undefined);
 
     /**
+     * @returns a number in:
+     * - [0, a[ if only one parameter is provided
+     * - [a, b[ if a <= b
+     * - ]b, a] if a > b
+     */
+    uniform(a: number, b?: number): number {
+        if (b === undefined) {
+            return this.random() * a;
+        }
+        return a + this.random() * (b - a);
+    }
+    /**
      * @returns a number in [[min, max[[
      */
     randRange(max: number): number;
     randRange(min: number, max: number): number;
     randRange(min: number, max?: number): number {
-        if (max === undefined) {
-            max = min;
-            min = 0;
-        }
-        return min + Math.floor(this.random() * (max - min));
+        return Math.floor(this.uniform(min, max));
     }
     /**
      * @returns one of the elements
@@ -34,7 +42,7 @@ export default abstract class AbstractRNG {
         const cumWeights = weights.map(w => (accu += w));
         const maxCumWeight = cumWeights[cumWeights.length - 1];
         while (true) {
-            const rand = this.random() * maxCumWeight;
+            const rand = this.uniform(maxCumWeight);
             const idx = cumWeights.findIndex(w => w > rand);
             yield array[idx];
         }
