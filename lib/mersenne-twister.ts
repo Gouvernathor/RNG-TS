@@ -35,8 +35,8 @@ export default class MersenneTwister extends AbstractRNG {
     }
 
     random() {
-        if (this.#index === 0) {
-            const state = this.#state;
+        const state = this.#state;
+        if (this.#index >= _624) {
             for (let i = 0; i < _624; i++) {
                 // Bit 31 (32nd bit) of state[i]
                 let y = (state[i] & 0x80000000);
@@ -50,14 +50,12 @@ export default class MersenneTwister extends AbstractRNG {
             }
         }
 
-        let y = this.#state[this.#index];
+        let y = state[this.#index++];
 
         y ^= y >>> 11;
         y ^= (y << 7) & 0x9d2c5680; // 2636928640
         y ^= (y << 15) & 0xefc60000; // 4022730752
         y ^= y >>> 18;
-
-        this.#index = (this.#index + 1) % _624;
 
         return (y >>> 0) * (1.0 / 4294967296.0);
     }
