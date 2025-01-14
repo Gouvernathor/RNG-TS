@@ -27,9 +27,9 @@ export default class MersenneTwister extends AbstractRNG {
             seed;
 
         for (let i = 1; i < _624; i++) {
-            state[i] = state[i-1] ^ (state[i-1] >>> 30);
-            state[i] = 0x6c078965 * state[i] + i; // 1812433253
-            state[i] = state[i] & ((state[i] << 32) - 1);
+            state[i] = ((state[i-1] ^ (state[i-1] >>> 30)
+                        * 0x6c078965) + i) // 1812433253
+                       << 0; // cast to int32
         }
     }
 
