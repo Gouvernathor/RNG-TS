@@ -22,9 +22,8 @@ export default class MersenneTwister extends AbstractRNG {
 
         const state = this.#state;
 
-        state[0] = seed === undefined ?
-            Math.floor(Math.random() * 0xffffffff) | 0 :
-            seed;
+        state[0] = seed ??
+            Math.floor(Math.random() * 0xffffffff) | 0;
 
         for (let i = 1; i < _624; i++) {
             state[i] = ((state[i-1] ^ (state[i-1] >>> 30)
