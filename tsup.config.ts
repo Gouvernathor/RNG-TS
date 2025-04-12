@@ -1,7 +1,7 @@
 import {defineConfig} from 'tsup';
 
 export default defineConfig({
-    entry: ["RNG.ts"],
+    entry: ["src/RNG.ts"],
     format: "esm",
     dts: true,
     sourcemap: true,

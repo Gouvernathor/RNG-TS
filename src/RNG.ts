@@ -1,4 +1,4 @@
-import AbstractRNG from "./abstract";
+import AbstractRNG from "./abstract"
 import hashString from "./hashString";
 import MersenneTwister from "./lib/mersenne-twister";
 import ParkMiller from "./lib/park-miller";
