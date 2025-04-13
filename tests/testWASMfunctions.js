@@ -2,8 +2,12 @@ import assert from "assert";
 import * as exports from "../build/debug.js";
 
 // RNG default algorithm
+console.time("WASM RNG instantiation");
 const rng = exports.RNGnew(1234);
+console.timeEnd("WASM RNG instantiation");
+console.time("WASM RNG random");
 assert.strictEqual(exports.RNGrandom(rng), 0.10858841380104423);
+console.timeEnd("WASM RNG random");
 // assert.strictEqual(exports.RNGrandInt(rng, rng), 128476320); // Specific to the default RNG
 // assert.strictEqual(exports.RNGrandRange(rng, 1, 2087), 84);
 // assert.strictEqual(exports.RNGchoice(rng, [1, 2, 3, 4, 5]), 5);

@@ -2,8 +2,12 @@ import assert from "assert";
 import RNG from "../dist/rng.js";
 
 // RNG default algorithm
+console.time("JS RNG instantiation");
 const rng = new RNG(1234);
+console.timeEnd("JS RNG instantiation");
+console.time("JS RNG random");
 assert.strictEqual(rng.random(), 0.10858841380104423);
+console.timeEnd("JS RNG random");
 assert.strictEqual(rng.randInt(), 128476320); // Specific to the default RNG
 assert.strictEqual(rng.randRange(1, 2087), 84);
 assert.strictEqual(rng.choice([1, 2, 3, 4, 5]), 5);
