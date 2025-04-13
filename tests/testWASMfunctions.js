@@ -29,3 +29,11 @@ console.timeEnd("WASM MT instantiation");
 console.time("WASM MT random");
 assert.strictEqual(exports.MTrandom(mt), 0.1337936078198254);
 console.timeEnd("WASM MT random");
+
+// Park-Miller algorithm
+console.time("WASM PM instantiation");
+const pm = exports.PMnew(1234);
+console.timeEnd("WASM PM instantiation");
+console.time("WASM PM random");
+assert.strictEqual(exports.PMrandom(pm), 0.009657739666131204);
+console.timeEnd("WASM PM random");

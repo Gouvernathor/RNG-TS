@@ -44,8 +44,12 @@ assert.strictEqual(mt.random(), 0.1337936078198254, "Reseeding doesn't give the 
 mt.seed = "frehtjdfhdffvd"; // Reseeding with a string
 
 // Park-Miller algorithm
+console.time("JS PM instantiation");
 const pm = new RNG.PM(1234);
+console.timeEnd("JS PM instantiation");
+console.time("JS PM random");
 assert.strictEqual(pm.random(), 0.009657739666131204);
+console.timeEnd("JS PM random");
 assert.strictEqual(pm.randRange(1, 2087), 663);
 assert.strictEqual(pm.choice([1, 2, 3, 4, 5]), 3);
 assert.deepStrictEqual(pm.choices([1, 2, 3, 4, 5], {k: 3}), [5, 3, 1]);

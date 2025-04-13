@@ -1,6 +1,7 @@
 // Version without mixin or abstract base class
 // and where mixin methods are in TS/JS
 import { MersenneTwisterStateHolder } from "./mersenne-twister";
+import { ParkMillerStateHolder } from "./park-miller";
 
 const M: u32 = 0x80000000; // 2**31
 const A: u32 = 1103515245;
@@ -56,6 +57,16 @@ export function MTrandom(mt: MersenneTwisterStateHolder): f64 {
 }
 
 // PM state object
+// (imported)
 // PM instantiator function
+export function PMnew(seed: u32): ParkMillerStateHolder {
+    return new ParkMillerStateHolder(seed);
+}
 // PM seeder function
+export function PMseed(pm: ParkMillerStateHolder, seed: u32): void {
+    pm.seed = seed;
+}
 // PM random function
+export function PMrandom(pm: ParkMillerStateHolder): f64 {
+    return pm.random();
+}
