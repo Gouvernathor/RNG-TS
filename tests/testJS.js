@@ -24,8 +24,12 @@ rng.seed = "frehtjdfhdffvd"; // Reseeding with a string
 
 
 // Mersenne Twister algorithm
+console.time("JS MT instantiation");
 const mt = new RNG.MT(1234);
+console.timeEnd("JS MT instantiation");
+console.time("JS MT random");
 assert.strictEqual(mt.random(), 0.1337936078198254);
+console.timeEnd("JS MT random");
 assert.strictEqual(mt.randRange(1, 2087), 278);
 assert.strictEqual(mt.choice([1, 2, 3, 4, 5]), 1);
 assert.deepStrictEqual(mt.choices([1, 2, 3, 4, 5], {k: 3}), [1, 1, 1]);

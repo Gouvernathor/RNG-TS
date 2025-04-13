@@ -1,5 +1,6 @@
 // Version without mixin or abstract base class
 // and where mixin methods are in TS/JS
+import { MersenneTwisterStateHolder } from "./mersenne-twister";
 
 const M: u32 = 0x80000000; // 2**31
 const A: u32 = 1103515245;
@@ -40,9 +41,19 @@ export function RNGrandom(rng: RNGStateHolder): f64 {
 }
 
 // MT state object
+// (imported)
 // MT instantiator function
+export function MTnew(seed: u32): MersenneTwisterStateHolder {
+    return new MersenneTwisterStateHolder(seed);
+}
 // MT seeder function
+export function MTseed(mt: MersenneTwisterStateHolder, seed: u32): void {
+    mt.seed = seed;
+}
 // MT random function
+export function MTrandom(mt: MersenneTwisterStateHolder): f64 {
+    return mt.random();
+}
 
 // PM state object
 // PM instantiator function

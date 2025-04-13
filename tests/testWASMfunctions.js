@@ -21,3 +21,11 @@ console.timeEnd("WASM RNG random");
 exports.RNGseed(rng, 1234);
 assert.strictEqual(exports.RNGrandom(rng), 0.10858841380104423, "Reseeding doesn't give the same state as passing the seed to the constructor");
 // rng.seed = "frehtjdfhdffvd"; // Reseeding with a string
+
+// Mersenne Twister algorithm
+console.time("WASM MT instantiation");
+const mt = exports.MTnew(1234);
+console.timeEnd("WASM MT instantiation");
+console.time("WASM MT random");
+assert.strictEqual(exports.MTrandom(mt), 0.1337936078198254);
+console.timeEnd("WASM MT random");
