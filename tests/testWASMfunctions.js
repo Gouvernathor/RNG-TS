@@ -29,6 +29,8 @@ console.timeEnd("WASM MT instantiation");
 console.time("WASM MT random");
 assert.strictEqual(exports.MTrandom(mt), 0.1337936078198254);
 console.timeEnd("WASM MT random");
+exports.MTseed(mt, 1234);
+assert.strictEqual(exports.MTrandom(mt), 0.1337936078198254, "Reseeding doesn't give the same state as passing the seed to the constructor");
 
 // Park-Miller algorithm
 console.time("WASM PM instantiation");
@@ -37,3 +39,5 @@ console.timeEnd("WASM PM instantiation");
 console.time("WASM PM random");
 assert.strictEqual(exports.PMrandom(pm), 0.009657739666131204);
 console.timeEnd("WASM PM random");
+exports.PMseed(pm, 1234);
+assert.strictEqual(exports.PMrandom(pm), 0.009657739666131204, "Reseeding doesn't give the same state as passing the seed to the constructor");
