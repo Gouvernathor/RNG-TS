@@ -11,7 +11,7 @@ export default class ParkMiller extends AbstractRNG {
 
     set seed(seed: number | string | undefined) {
         if (seed === undefined) {
-            seed = 1;
+            seed = Math.floor(Math.random() * 0xffffffff);
         } else if (typeof seed === "string") {
             seed = hashString(seed);
         }
