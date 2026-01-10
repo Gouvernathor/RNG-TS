@@ -21,6 +21,7 @@ export default abstract class AbstractRNG {
         }
         return a + this.random() * (b - a);
     }
+
     /**
      * @returns a number in [[min, max[[
      */
@@ -29,12 +30,23 @@ export default abstract class AbstractRNG {
     randRange(min: number, max?: number): number {
         return Math.floor(this.uniform(min, max));
     }
+
+    /**
+     * Generates a number able to be used as a seed to another RNG.
+     * This is more recommended than using the other methods to generate seeds,
+     * as the value will be more evenly spread.
+     */
+    randSeed() {
+        return this.randRange(0xffffffff);
+    }
+
     /**
      * @returns one of the elements
      */
     choice<T>(array: ReadonlyArray<T>): T {
         return array[this.randRange(0, array.length)]!;
     }
+
     /**
      * Warning: this generator is infinite.
      * It reseeds at every generation.
@@ -50,6 +62,7 @@ export default abstract class AbstractRNG {
             yield array[idx]!;
         }
     }
+
     /**
      * Picks k elements from the array with replacement.
      * This reseeds k times, not 1 time.
@@ -64,6 +77,7 @@ export default abstract class AbstractRNG {
             return Array.from({length: k}, () => gen.next().value!);
         }
     }
+
     /**
      * @param maxLen the number of elements to return, defaults to the length of the input
      * @returns an array with the same elements in random order (without replacement)
