@@ -2,7 +2,9 @@ import AbstractRNG from "./abstract";
 import hashString from "./hashString";
 import MersenneTwister from "./lib/mersenne-twister";
 import ParkMiller from "./lib/park-miller";
+
 export { MersenneTwister, ParkMiller };
+export type { AbstractRNG as AnyRNG };
 
 const M = 0x80000000; // 2**31
 const A = 1103515245;
