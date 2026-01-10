@@ -26,9 +26,10 @@ export default class MersenneTwister extends AbstractRNG {
             Math.floor(Math.random() * 0xffffffff) | 0;
 
         for (let i = 1; i < _624; i++) {
-            state[i] = (((state[i-1]! ^ (state[i-1]! >>> 30))
-                        * 0x6c078965) + i) // 1812433253
-                       << 0; // cast to int32
+            const s = state[i - 1]! ^ (state[i - 1]! >>> 30);
+            state[i] =
+                ((((((s & 0xffff0000) >>> 16) * 1812433253) << 16) + (s & 0x0000ffff) * 1812433253) + i)
+                >>> 0;
         }
     }
 
