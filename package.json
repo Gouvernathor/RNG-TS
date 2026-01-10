@@ -6,35 +6,35 @@
     "main": "RNG.js",
     "types": "RNG.d.ts",
     "exports": {
-      ".": {
-        "import": {
-          "types": "./dist/RNG.d.ts",
-          "default": "./dist/RNG.js"
+        ".": {
+            "import": {
+                "types": "./dist/RNG.d.ts",
+                "default": "./dist/RNG.js"
+            }
         }
-      }
     },
     "files": [
-      "dist"
+        "dist"
     ],
     "scripts": {
-      "build": "tsup",
-      "test": "echo \"Error: no test specified\" && exit 1"
+        "build": "tsc",
+        "test": "echo \"Error: no test specified\" && exit 1"
     },
     "repository": {
-      "type": "git",
-      "url": "git+https://github.com/Gouvernathor/rng-ts.git"
+        "type": "git",
+        "url": "git+https://github.com/Gouvernathor/rng-ts.git"
     },
     "keywords": [
-      "rng"
+        "rng"
     ],
     "author": "Gouvernathor",
     "license": "ISC",
     "bugs": {
-      "url": "https://github.com/Gouvernathor/rng-ts/issues"
+        "url": "https://github.com/Gouvernathor/rng-ts/issues"
     },
     "homepage": "https://github.com/Gouvernathor/rng-ts#readme",
     "devDependencies": {
-      "typescript": "*",
-      "tsup": "^8.3.5"
+        "@tsconfig/strictest": "^2.0.8",
+        "typescript": "*"
     }
-  }
+}

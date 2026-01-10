@@ -32,21 +32,22 @@ export default abstract class AbstractRNG {
     /**
      * @returns one of the elements
      */
-    choice<T>(array: ReadonlyArray<T>) {
-        return array[this.randRange(0, array.length)];
+    choice<T>(array: ReadonlyArray<T>): T {
+        return array[this.randRange(0, array.length)]!;
     }
     /**
      * Warning: this generator is infinite.
      * It reseeds at every generation.
+     * The two parameters must be the same length.
      */
-    *weightedChoicesGenerator<T>(array: ReadonlyArray<T>, weights: ReadonlyArray<number>) {
+    *weightedChoicesGenerator<T>(array: ReadonlyArray<T>, weights: ReadonlyArray<number>): Generator<T> {
         let accu = 0;
         const cumWeights = weights.map(w => (accu += w));
-        const maxCumWeight = cumWeights[cumWeights.length - 1];
+        const maxCumWeight = cumWeights[cumWeights.length - 1]!;
         while (true) {
             const rand = this.uniform(maxCumWeight);
             const idx = cumWeights.findIndex(w => w > rand);
-            yield array[idx];
+            yield array[idx]!;
         }
     }
     /**
@@ -70,6 +71,6 @@ export default abstract class AbstractRNG {
     shuffled<T>(input: Iterable<T>, maxLen?: number): T[] {
         const copy = [...input];
         maxLen ??= copy.length;
-        return Array.from({length: maxLen}, () => copy.splice(this.randRange(0, copy.length), 1)[0]);
+        return Array.from({length: maxLen}, () => copy.splice(this.randRange(0, copy.length), 1)[0]!);
     }
 }
