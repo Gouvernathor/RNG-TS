@@ -1,7 +1,7 @@
-import AbstractRNG from "./abstract";
-import hashString from "./hashString";
-import MersenneTwister from "./lib/mersenne-twister";
-import ParkMiller from "./lib/park-miller";
+import AbstractRNG from "./abstract.js";
+import hashString from "./hashString.js";
+import MersenneTwister from "./lib/mersenne-twister.js";
+import ParkMiller from "./lib/park-miller.js";
 
 export { MersenneTwister, ParkMiller };
 export type { AbstractRNG as AnyRNG };

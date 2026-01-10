@@ -1,5 +1,5 @@
-import AbstractRNG from "../abstract";
-import hashString from "../hashString";
+import AbstractRNG from "../abstract.js";
+import hashString from "../hashString.js";
 
 export default class ParkMiller extends AbstractRNG {
     #seed!: number;
