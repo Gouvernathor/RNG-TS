@@ -43,7 +43,7 @@ export default abstract class AbstractRNG {
     /**
      * @returns one of the elements
      */
-    choice<T>(array: ReadonlyArray<T>): T {
+    choice<T>(array: readonly T[]): T {
         return array[this.randRange(0, array.length)]!;
     }
 
@@ -52,7 +52,7 @@ export default abstract class AbstractRNG {
      * It reseeds at every generation.
      * The two parameters must be the same length.
      */
-    *weightedChoicesGenerator<T>(array: ReadonlyArray<T>, weights: ReadonlyArray<number>): Generator<T> {
+    *weightedChoicesGenerator<T>(array: readonly T[], weights: readonly number[]): Generator<T> {
         let accu = 0;
         const cumWeights = weights.map(w => (accu += w));
         const maxCumWeight = cumWeights[cumWeights.length - 1]!;
@@ -69,7 +69,7 @@ export default abstract class AbstractRNG {
      * @param k number of elements to choose
      * @param weights if provided, the probability of each element to be chosen
      */
-    choices<T>(array: ReadonlyArray<T>, { k, weights }: { k: number, weights?: ReadonlyArray<number> }): T[] {
+    choices<T>(array: readonly T[], { k, weights }: { k: number, weights?: readonly number[] }): T[] {
         if (weights === undefined) {
             return Array.from({length: k}, () => this.choice(array));
         } else {
