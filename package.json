@@ -36,5 +36,8 @@
     "devDependencies": {
         "@tsconfig/strictest": "^2.0.8",
         "typescript": "*"
+    },
+    "dependencies": {
+        "@gouvernathor/fraction.ts": "^1.1.0"
     }
 }
