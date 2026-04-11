@@ -37,7 +37,7 @@ export default class MersenneTwister extends AbstractRNG {
         if (this.#index >= _624) {
             for (let i = 0; i < _624; i++) {
                 // Bit 31 (32nd bit) of state[i]
-                let y = (state[i] & 0x80000000)
+                const y = (state[i] & 0x80000000)
                 // Bits 0-30 (first 31 bits) of state[...]
                       + (state[(i+1) % _624] & 0x7fffffff);
                 // The new pseudo random number
