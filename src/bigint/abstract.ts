@@ -74,4 +74,11 @@ export default abstract class AbstractBigIntRNG {
 
         return Fraction.fromPair(this.randRange(a * resolution), resolution);
     }
+
+    /**
+     * @returns one of the elements
+     */
+    choice<T>(array: readonly T[]): T {
+        return array[Number(this.randRange(BigInt(array.length)))]!;
+    }
 }
