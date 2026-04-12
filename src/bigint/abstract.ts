@@ -30,9 +30,9 @@ export default abstract class AbstractBigIntRNG {
     /**
      * Must return a Fraction value between 0 and 1;
      * which means that the numerator is positive and inferior to the denominator.
-     * @param resolution a minimum value for the maximum value of the denominator.
-     * The minimum number of different values
+     * @param resolution the minimum number of different values
      * having the same probability of being emitted.
+     * A minimum value for the maximum value of the denominator.
      * (Fraction need not be emitted in irreducible form.)
      */
     abstract random(resolution?: bigint): Fraction;
