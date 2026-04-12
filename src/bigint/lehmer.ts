@@ -52,7 +52,7 @@ export default class Lehmer128BigInt extends AbstractRNG {
         const numberOfNextCalls = Math.ceil(nBits4 / 64);
 
         // call #next that number of times
-        const values = Array.from({ length: numberOfNextCalls }, this.#next);
+        const values = Array.from({ length: numberOfNextCalls }, this.#next.bind(this));
 
         // concatenate the bigints' bytes, becoming the numerator
         const numerator = values.reduce((prev, curr) => (prev << 64n) + curr);
