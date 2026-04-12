@@ -76,13 +76,6 @@ export default abstract class AbstractBigIntRNG {
     }
 
     /**
-     * @returns one of the elements
-     */
-    choice<T>(array: readonly T[]): T {
-        return array[Number(this.randRange(BigInt(array.length)))]!;
-    }
-
-    /**
      * Warning: this generator is infinite.
      * It reseeds at every generation.
      */
@@ -95,5 +88,44 @@ export default abstract class AbstractBigIntRNG {
             const idx = cumWeights.findIndex(w => w > rand);
             yield weightedArray[idx]![0];
         }
+    }
+
+    /**
+     * Picks k elements from the array with replacement.
+     * This reseeds k times, not 1 time.
+     * @param k number of elements to choose
+     */
+    weightedChoices<T>(weightedArray: readonly (readonly [T, bigint])[], k: number): T[] {
+        const gen = this.weightedChoicesGenerator(weightedArray);
+        return Array.from({length: k}, () => gen.next().value!);
+    }
+
+    /**
+     * This has no benefit compared to using a number (f64) -based RNG.
+     * @returns one of the elements
+     */
+    choice<T>(array: readonly T[]): T {
+        return array[Number(this.randRange(BigInt(array.length)))]!;
+    }
+
+    /**
+     * This has no benefit compared to using a number (f64) -based RNG.
+     * Picks k elements from the array with replacement.
+     * This reseeds k times, not 1 time.
+     * @param k number of elements to choose
+     */
+    choices<T>(array: readonly T[], k: number): T[] {
+        return Array.from({length: k}, () => this.choice(array));
+    }
+
+    /**
+     * This has no benefit compared to using a number (f64) -based RNG.
+     * @param maxLen the number of elements to return, defaults to the length of the input
+     * @returns an array with the same elements in random order (without replacement)
+     */
+    shuffled<T>(input: Iterable<T>, maxLen?: number): T[] {
+        const copy = [...input];
+        maxLen ??= copy.length;
+        return Array.from({length: maxLen}, () => copy.splice(Number(this.randRange(0n, BigInt(copy.length))), 1)[0]!);
     }
 }
