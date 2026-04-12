@@ -1,5 +1,5 @@
 import AbstractRNG from "../abstract.js";
-import hashString from "../hashString.js";
+import hashString from "../hash-string.js";
 
 // magics
 const _624 = 624;

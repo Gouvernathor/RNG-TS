@@ -1,5 +1,5 @@
 import AbstractRNG from "./abstract.js";
-import hashString from "./hashString.js";
+import hashString from "./hash-string.js";
 import MersenneTwister from "./lib/mersenne-twister.js";
 import ParkMiller from "./lib/park-miller.js";
 
