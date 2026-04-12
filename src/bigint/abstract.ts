@@ -57,6 +57,7 @@ export default abstract class AbstractBigIntRNG {
         return this.random(req).mul(req).floor();
     }
 
+    // TODO a version taking Fraction as inputs ?
     /**
      * @returns a Fraction in:
      * - [0, a[ if only one parameter is provided
