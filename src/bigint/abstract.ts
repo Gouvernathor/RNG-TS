@@ -27,6 +27,8 @@ import { Fraction } from "@gouvernathor/fraction.ts";
  * as long as its value is in the expected range.
  */
 export default abstract class AbstractBigIntRNG {
+    resolution: bigint = 0n;
+
     /**
      * Must return a Fraction value between 0 and 1;
      * which means that the numerator is positive and inferior to the denominator.
@@ -34,6 +36,8 @@ export default abstract class AbstractBigIntRNG {
      * having the same probability of being emitted.
      * A minimum value for the maximum value of the denominator.
      * (Fraction need not be emitted in irreducible form.)
+     * Must default to the generator's resolution,
+     * and throw on values not strictly positive.
      */
     abstract random(resolution?: bigint): Fraction;
     abstract set seed(seed: number|bigint|string|undefined);
