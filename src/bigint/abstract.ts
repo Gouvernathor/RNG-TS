@@ -81,4 +81,19 @@ export default abstract class AbstractBigIntRNG {
     choice<T>(array: readonly T[]): T {
         return array[Number(this.randRange(BigInt(array.length)))]!;
     }
+
+    /**
+     * Warning: this generator is infinite.
+     * It reseeds at every generation.
+     */
+    *weightedChoicesGenerator<T>(weightedArray: readonly (readonly [T, bigint])[]): Generator<T> {
+        let accu = 0n;
+        const cumWeights = weightedArray.map(([_, w]) => (accu += w));
+        const maxCumWeight = cumWeights[cumWeights.length - 1]!;
+        while (true) {
+            const rand = this.randRange(maxCumWeight);
+            const idx = cumWeights.findIndex(w => w > rand);
+            yield weightedArray[idx]![0];
+        }
+    }
 }
