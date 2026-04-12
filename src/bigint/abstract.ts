@@ -49,9 +49,6 @@ export default abstract class AbstractBigIntRNG {
     randRange(min: bigint, max: bigint): bigint;
     randRange(req: bigint, maxx?: bigint): bigint {
         if (maxx !== undefined) {
-            if (req >= maxx) {
-                throw new Error("Parameter value violation");
-            }
             return this.randRange(maxx-req) + req;
         }
         if (req < 0) {
