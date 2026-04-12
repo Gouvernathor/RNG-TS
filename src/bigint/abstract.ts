@@ -127,6 +127,6 @@ export default abstract class AbstractBigIntRNG {
     shuffled<T>(input: Iterable<T>, maxLen?: number): T[] {
         const copy = [...input];
         maxLen ??= copy.length;
-        return Array.from({length: maxLen}, () => copy.splice(Number(this.randRange(0n, BigInt(copy.length))), 1)[0]!);
+        return Array.from({length: maxLen}, () => copy.splice(Number(this.randRange(BigInt(copy.length))), 1)[0]!);
     }
 }
