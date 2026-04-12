@@ -3,8 +3,8 @@
  */
 
 import { Fraction } from "@gouvernathor/fraction.ts";
-import AbstractRNG from "./abstract";
-import hashString from "./hash-string";
+import AbstractRNG from "./abstract.js";
+import hashString from "./hash-string.js";
 
 export default class Lehmer128BigInt extends AbstractRNG {
     #state!: bigint;
