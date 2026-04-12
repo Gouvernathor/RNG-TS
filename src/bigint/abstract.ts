@@ -50,6 +50,9 @@ export default abstract class AbstractBigIntRNG {
             }
             return this.randRange(maxx-req) + req;
         }
+        if (req < 0) {
+            return -this.randRange(req);
+        }
 
         return this.random(req).mul(req).floor();
     }
@@ -67,6 +70,10 @@ export default abstract class AbstractBigIntRNG {
         if (b !== undefined) {
             return this.uniform(resolution, b-a).add(a);
         }
+        if (a < 0) {
+            return this.uniform(resolution, a).neg();
+        }
+
         return Fraction.fromPair(this.randRange(a * resolution), resolution);
     }
 }
