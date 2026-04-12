@@ -95,6 +95,6 @@ export default abstract class AbstractRNG {
     shuffled<T>(input: Iterable<T>, maxLen?: number): T[] {
         const copy = [...input];
         maxLen ??= copy.length;
-        return Array.from({length: maxLen}, () => copy.splice(this.randRange(0, copy.length), 1)[0]!);
+        return Array.from({length: maxLen}, () => copy.splice(this.randRange(copy.length), 1)[0]!);
     }
 }
