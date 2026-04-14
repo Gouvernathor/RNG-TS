@@ -32,9 +32,8 @@ export default class Lehmer128BigInt extends AbstractRNG {
 
     #next() {
         const mult = 0x12e15e35_b500f16e_2e714eb2_b37916a5n;
-        this.#state *= mult;
         // truncate to 128 bits to prevent memory leak
-        this.#state = BigInt.asUintN(128, this.#state);
+        this.#state = BigInt.asUintN(128, this.#state * mult);
         return this.#state >> 64n;
     }
 
