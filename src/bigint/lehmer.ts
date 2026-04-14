@@ -4,7 +4,7 @@
 
 import { Fraction } from "@gouvernathor/fraction.ts";
 import AbstractRNG from "./abstract.js";
-import hashString from "./hash-string.js";
+import { hashNumber, hashString } from "./hash.js";
 
 export default class Lehmer128BigInt extends AbstractRNG {
     #state!: bigint;
@@ -20,9 +20,7 @@ export default class Lehmer128BigInt extends AbstractRNG {
         } else if (typeof seed === "string") {
             seed = hashString(seed);
         } else if (typeof seed === "number") {
-            // try to keep some of the complexity of decimal values
-            const fract = Fraction.fromNumeric(seed);
-            seed = fract.numerator ^ fract.denominator;
+            seed = hashNumber(seed);
         }
 
         // the state must be seeded with an odd value
