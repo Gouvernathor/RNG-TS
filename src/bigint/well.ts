@@ -30,7 +30,7 @@ export default class WellBigIntRNG /*extends AbstractBigIntRNG*/ {
 
     constructor() {
         // super();
-        this.init_by_array([], 0n);
+        this.init_by_array([]);
     }
 
     /* do not use this function directly */
@@ -55,18 +55,18 @@ export default class WellBigIntRNG /*extends AbstractBigIntRNG*/ {
     /* init_key is the array for initializing keys */
     /* key_length is its length */
     /* slight change for C++, 2004/2/26 */
-    private init_by_array(init_key: readonly bigint[], key_length: bigint) {
-        let i, j, k: bigint;
+    private init_by_array(init_key: readonly bigint[]) {
+        const keyLength = init_key.length;
+        let i=1, j=0, k: bigint;
         this.init_genrand(19650218n);
-        i=1; j=0;
-        k = (N>key_length ? N : key_length);
+        k = (N>keyLength ? N : BigInt(keyLength));
         for (; k; k--) {
             this.mt[i] = (this.mt[i]! ^ ((this.mt[i-1]! ^ (this.mt[i-1]! >> 30n)) * 1664525n))
               + init_key[j]! + BigInt(j); /* non linear */
             this.mt[i]! &= 0xffffffffn; /* for WORDSIZE > 32 machines */
             i++; j++;
             if (i>=N) { this.mt[0] = this.mt[numberN-1]!; i=1; }
-            if (j>=key_length) j=0;
+            if (j>=keyLength) j=0;
         }
         for (k=N-1n; k; k--) {
             this.mt[i] = (this.mt[i]! ^ ((this.mt[i-1]! ^ (this.mt[i-1]! >> 30n)) * 1566083941n))
