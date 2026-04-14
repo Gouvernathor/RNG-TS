@@ -1,6 +1,7 @@
-// reference : https://www.ritsumei.ac.jp/~harase/memt19937-II.c
+import AbstractBigIntRNG, { makeRandom } from "./abstract";
+import { hashNumber, hashString } from "./hash";
 
-import AbstractBigIntRNG from "./abstract";
+// reference : https://www.ritsumei.ac.jp/~harase/memt19937-II.c
 
 const N = 624n;
 const numberN = Number(N);
@@ -22,15 +23,14 @@ const TEMPERING_SHIFT_2 = (z: bigint) => z << 14n;
 const MASK1 = 0xb219beabn;
 const MASK2 = 0x56bde52an;
 
-export default class WellBigIntRNG /*extends AbstractBigIntRNG*/ {
+class WellBigIntBase {
     private readonly mt = Array<bigint>(N);
     private mti = Number(N)+1;
 
-    public genRandInt32!: () => bigint;
+    private genRandInt32!: () => bigint;
 
-    constructor() {
-        // super();
-        this.init_by_array([]);
+    constructor(initArray: readonly bigint[]) {
+        this.init_by_array(initArray);
     }
 
     /* do not use this function directly */
@@ -55,7 +55,7 @@ export default class WellBigIntRNG /*extends AbstractBigIntRNG*/ {
     /* init_key is the array for initializing keys */
     /* key_length is its length */
     /* slight change for C++, 2004/2/26 */
-    private init_by_array(init_key: readonly bigint[]) {
+    init_by_array(init_key: readonly bigint[]) {
         const keyLength = init_key.length;
         let i=1, j=0, k: bigint;
         this.init_genrand(19650218n);
@@ -63,7 +63,7 @@ export default class WellBigIntRNG /*extends AbstractBigIntRNG*/ {
         for (; k; k--) {
             this.mt[i] = (this.mt[i]! ^ ((this.mt[i-1]! ^ (this.mt[i-1]! >> 30n)) * 1664525n))
               + init_key[j]! + BigInt(j); /* non linear */
-            this.mt[i]! &= 0xffffffffn; /* for WORDSIZE > 32 machines */
+            this.mt[i]! &= 0xffffffffn;
             i++; j++;
             if (i>=N) { this.mt[0] = this.mt[numberN-1]!; i=1; }
             if (j>=keyLength) j=0;
@@ -71,7 +71,7 @@ export default class WellBigIntRNG /*extends AbstractBigIntRNG*/ {
         for (k=N-1n; k; k--) {
             this.mt[i] = (this.mt[i]! ^ ((this.mt[i-1]! ^ (this.mt[i-1]! >> 30n)) * 1566083941n))
               - BigInt(i); /* non linear */
-            this.mt[i]! &= 0xffffffffn; /* for WORDSIZE > 32 machines */
+            this.mt[i]! &= 0xffffffffn;
             i++;
             if (i>=N) { this.mt[0] = this.mt[numberN-1]!; i=1; }
         }
@@ -135,57 +135,53 @@ export default class WellBigIntRNG /*extends AbstractBigIntRNG*/ {
         this.genRandInt32 = this.case1;
         return z;
     }
+
+    // returns 31 bits
+    next() {
+        return this.genRandInt32() >> 1n;
+    }
 }
 
-// /* generates a random number on [0,0x7fffffff]-interval */
-// unsigned int genrand_int31(void)
-// {
-//     return (unsigned int)(genRandInt32()>>1);
-// }
+export default class WellBigIntRNG extends AbstractBigIntRNG {
+    private readonly well: WellBigIntBase;
 
-// /* generates a random number on [0,1]-real-interval */
-// double genrand_real1(void)
-// {
-//     return genRandInt32()*(1.0/4294967295.0);
-//     /* divided by 2^32-1 */
-// }
+    override readonly random;
 
-// /* generates a random number on [0,1)-real-interval */
-// double genrand_real2(void)
-// {
-//     return genRandInt32()*(1.0/4294967296.0);
-//     /* divided by 2^32 */
-// }
+    constructor(seed?: bigint|number|string) {
+        super();
+        const array = this.hashSeed(seed);
+        this.well = new WellBigIntBase(array);
 
-// /* generates a random number on (0,1)-real-interval */
-// double genrand_real3(void)
-// {
-//     return (((double)genRandInt32()) + 0.5)*(1.0/4294967296.0);
-//     /* divided by 2^32 */
-// }
+        this.random = makeRandom({
+            next: this.well.next.bind(this.well),
+            nBitsFromNext: 31n,
+        });
+    }
 
-// /* generates a random number on [0,1) with 53-bit resolution*/
-// double genrand_res53(void)
-// {
-//     unsigned int a=genRandInt32()>>5, b=genRandInt32()>>6;
-//     return(a*67108864.0+b)*(1.0/9007199254740992.0);
-// }
-// /* These real versions are due to Isaku Wada, 2002/01/09 added */
+    set seed(seed: bigint|number|string|undefined) {
+        const array = this.hashSeed(seed);
+        this.well.init_by_array(array);
+    }
 
-// int main(void)
-// {
-//     int i;
-//     unsigned int init[4]={0x123n, 0x234n, 0x345n, 0x456n}, length=4;
-//     init_by_array(init, length);
-//     printf("1000 outputs of genRandInt32()\n");
-//     for (i=0; i<1000; i++) {
-//       printf("%10u ", genRandInt32());
-//       if (i%5==4) printf("\n");
-//     }
-//     printf("\n1000 outputs of genrand_real2()\n");
-//     for (i=0; i<1000; i++) {
-//       printf("%10.8f ", genrand_real2());
-//       if (i%5==4) printf("\n");
-//     }
-//     return 0;
-// }
+    private hashSeed(seed: bigint|number|string|undefined): bigint[] {
+        if (seed === undefined) {
+            seed = BigInt(Math.floor(Math.random() * 0x1fffffffffffff));
+        } else if (typeof seed === "string") {
+            seed = hashString(seed);
+        } else if (typeof seed === "number") {
+            seed = hashNumber(seed);
+        }
+
+        if (seed < 0) {
+            seed = -seed;
+        }
+
+        const array = [];
+        do {
+            array.push(BigInt.asUintN(16, seed));
+            seed >>= 16n;
+        } while (seed);
+
+        return array;
+    }
+}
