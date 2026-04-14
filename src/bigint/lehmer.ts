@@ -35,6 +35,6 @@ export default class Lehmer128BigInt extends AbstractRNG {
 
     override random = makeRandom({
         next: this.#next.bind(this),
-        nBitsOfNext: 64n,
+        nBitsFromNext: 64n,
     });
 }
