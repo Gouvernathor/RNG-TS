@@ -16,11 +16,10 @@ export default class Lehmer128BigInt extends AbstractRNG {
 
     override set seed(seed: string | number | bigint | undefined) {
         if (seed === undefined) {
-            seed = Math.floor(Math.random() * 0xffffffff);
+            seed = BigInt(Math.floor(Math.random() * 0xffffffff));
         } else if (typeof seed === "string") {
             seed = hashString(seed);
-        }
-        if (typeof seed === "number") {
+        } else if (typeof seed === "number") {
             // try to keep some of the complexity of decimal values
             const fract = Fraction.fromNumeric(seed);
             seed = fract.numerator ^ fract.denominator;
