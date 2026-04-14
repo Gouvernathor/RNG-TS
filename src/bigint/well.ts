@@ -138,7 +138,7 @@ class WellBigIntBase {
 
     // returns 31 bits
     next() {
-        return this.genRandInt32() >> 1n;
+        return BigInt.asUintN(31, this.genRandInt32() >> 1n);
     }
 }
 
