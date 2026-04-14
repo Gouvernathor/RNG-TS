@@ -1,5 +1,5 @@
-import AbstractBigIntRNG, { makeRandom } from "./abstract";
-import { hashNumber, hashString } from "./hash";
+import AbstractBigIntRNG, { makeRandom } from "./abstract.js";
+import { hashNumber, hashString } from "./hash.js";
 
 // reference : https://www.ritsumei.ac.jp/~harase/memt19937-II.c
 

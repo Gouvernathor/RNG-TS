@@ -1,5 +1,5 @@
-import AbstractBigIntRNG, { makeRandom } from "./abstract";
-import { hashNumber, hashString } from "./hash";
+import AbstractBigIntRNG, { makeRandom } from "./abstract.js";
+import { hashNumber, hashString } from "./hash.js";
 
 const M = 0x80000000n; // 2**31
 const Mnumber = Number(M);
