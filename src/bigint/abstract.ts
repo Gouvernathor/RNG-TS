@@ -38,6 +38,8 @@ export default abstract class AbstractBigIntRNG {
      * (Fraction need not be emitted in irreducible form.)
      * Must default to the generator's resolution,
      * and throw on values not strictly positive.
+     * The generator will reseed the same number of times for the same requested resolution,
+     * and the number of reseeds is increasing by the resolution.
      */
     abstract random(resolution?: bigint): Fraction;
     abstract set seed(seed: number|bigint|string|undefined);
