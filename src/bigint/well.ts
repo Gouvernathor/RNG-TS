@@ -1,5 +1,7 @@
 // reference : https://www.ritsumei.ac.jp/~harase/memt19937-II.c
 
+import AbstractBigIntRNG from "./abstract";
+
 const N = 624n;
 const numberN = Number(N);
 const M = 397n;
@@ -20,116 +22,120 @@ const TEMPERING_SHIFT_2 = (z: bigint) => z << 14n;
 const MASK1 = 0xb219beabn;
 const MASK2 = 0x56bde52an;
 
-const mt = Array<bigint>(N);
-let mti = Number(N)+1;
+export default class WellBigIntRNG /*extends AbstractBigIntRNG*/ {
+    private readonly mt = Array<bigint>(N);
+    private mti = Number(N)+1;
 
-let genRandInt32;
+    public genRandInt32!: () => bigint;
 
-
-/* do not use this function directly */
-/* initializes mt[N] with a seed */
-function init_genrand(s: bigint) {
-    mt[0]= s & 0xffffffffn;
-    for (mti=1; mti<N; mti++) {
-        mt[mti] =
-	    (1812433253n * (mt[mti-1]! ^ (mt[mti-1]! >> 30n)) + BigInt(mti));
-        /* See Knuth TAOCP Vol2. 3rd Ed. P.106 for multiplier. */
-        /* In the previous versions, MSBs of the seed affect   */
-        /* only MSBs of the array mt[].                        */
-        /* 2002/01/09 modified by Makoto Matsumoto             */
-        mt[mti]! &= 0xffffffffn;
-        /* for >32 bit machines */
-    }
-	mti = 0;
-	genRandInt32 = case1;
-}
-
-/* initialize by an array with array-length */
-/* init_key is the array for initializing keys */
-/* key_length is its length */
-/* slight change for C++, 2004/2/26 */
-function init_by_array(init_key: readonly bigint[], key_length: bigint) {
-    let i, j, k: bigint;
-    init_genrand(19650218n);
-    i=1; j=0;
-    k = (N>key_length ? N : key_length);
-    for (; k; k--) {
-        mt[i] = (mt[i]! ^ ((mt[i-1]! ^ (mt[i-1]! >> 30n)) * 1664525n))
-          + init_key[j]! + BigInt(j); /* non linear */
-        mt[i]! &= 0xffffffffn; /* for WORDSIZE > 32 machines */
-        i++; j++;
-        if (i>=N) { mt[0] = mt[numberN-1]!; i=1; }
-        if (j>=key_length) j=0;
-    }
-    for (k=N-1n; k; k--) {
-        mt[i] = (mt[i]! ^ ((mt[i-1]! ^ (mt[i-1]! >> 30n)) * 1566083941n))
-          - BigInt(i); /* non linear */
-        mt[i]! &= 0xffffffffn; /* for WORDSIZE > 32 machines */
-        i++;
-        if (i>=N) { mt[0] = mt[numberN-1]!; i=1; }
+    constructor() {
+        // super();
+        this.init_by_array([], 0n);
     }
 
-    mt[0] = 0x80000000n; /* MSB is 1; assuring non-zero initial array */
-	mti = 0;
-	genRandInt32 = case1;
-}
+    /* do not use this function directly */
+    /* initializes mt[N] with a seed */
+    private init_genrand(s: bigint) {
+        this.mt[0]= s & 0xffffffffn;
+        for (this.mti=1; this.mti<N; this.mti++) {
+            this.mt[this.mti] =
+            (1812433253n * (this.mt[this.mti-1]! ^ (this.mt[this.mti-1]! >> 30n)) + BigInt(this.mti));
+            /* See Knuth TAOCP Vol2. 3rd Ed. P.106 for multiplier. */
+            /* In the previous versions, MSBs of the seed affect   */
+            /* only MSBs of the array mt[].                        */
+            /* 2002/01/09 modified by Makoto Matsumoto             */
+            this.mt[this.mti]! &= 0xffffffffn;
+            /* for >32 bit machines */
+        }
+        this.mti = 0;
+        this.genRandInt32 = this.case1;
+    }
 
-function case1(): bigint {
-    mt[mti] = mt[mti+numberM]! ^ twist(mt[mti]!,mt[mti+1]!);
-    let z: bigint = mt[mti]! ^ (mt[mti + LAG1]! & MASK1);
-    z ^= TEMPERING_SHIFT_1(z);
-    z ^= TEMPERING_SHIFT_2(z);
-    z ^= (mt[mti + LAG2]! & MASK2);
-    mti++;
-    if(mti == numberN-numberM) genRandInt32 = case2;
-    return z;
-}
+    /* initialize by an array with array-length */
+    /* init_key is the array for initializing keys */
+    /* key_length is its length */
+    /* slight change for C++, 2004/2/26 */
+    private init_by_array(init_key: readonly bigint[], key_length: bigint) {
+        let i, j, k: bigint;
+        this.init_genrand(19650218n);
+        i=1; j=0;
+        k = (N>key_length ? N : key_length);
+        for (; k; k--) {
+            this.mt[i] = (this.mt[i]! ^ ((this.mt[i-1]! ^ (this.mt[i-1]! >> 30n)) * 1664525n))
+              + init_key[j]! + BigInt(j); /* non linear */
+            this.mt[i]! &= 0xffffffffn; /* for WORDSIZE > 32 machines */
+            i++; j++;
+            if (i>=N) { this.mt[0] = this.mt[numberN-1]!; i=1; }
+            if (j>=key_length) j=0;
+        }
+        for (k=N-1n; k; k--) {
+            this.mt[i] = (this.mt[i]! ^ ((this.mt[i-1]! ^ (this.mt[i-1]! >> 30n)) * 1566083941n))
+              - BigInt(i); /* non linear */
+            this.mt[i]! &= 0xffffffffn; /* for WORDSIZE > 32 machines */
+            i++;
+            if (i>=N) { this.mt[0] = this.mt[numberN-1]!; i=1; }
+        }
 
-function case2(): bigint {
-    mt[mti] = mt[mti+(numberM-numberN)]! ^ twist(mt[mti]!,mt[mti+1]!);
-    let z: bigint = mt[mti]! ^ (mt[mti + LAG1]! & MASK1);
-    z ^= TEMPERING_SHIFT_1(z);
-    z ^= TEMPERING_SHIFT_2(z);
-    z ^= (mt[mti + LAG2]! & MASK2);
-    mti++;
-    if(mti == LAG1over) genRandInt32 = case3;
-    return z;
-}
+        this.mt[0] = 0x80000000n; /* MSB is 1; assuring non-zero initial array */
+        this.mti = 0;
+        this.genRandInt32 = this.case1;
+    }
 
-function case3(): bigint {
-    mt[mti] = mt[mti+(numberM-numberN)]! ^ twist(mt[mti]!,mt[mti+1]!);
-    let z: bigint = mt[mti]! ^ (mt[mti - LAG1over]! & MASK1);
-    z ^= TEMPERING_SHIFT_1(z);
-    z ^= TEMPERING_SHIFT_2(z);
-    z ^= (mt[mti + LAG2]! & MASK2);
-    mti++;
-    if(mti == LAG2over) genRandInt32 = case4;
-    return z;
-}
+    private case1(): bigint {
+        this.mt[this.mti] = this.mt[this.mti+numberM]! ^ twist(this.mt[this.mti]!,this.mt[this.mti+1]!);
+        let z: bigint = this.mt[this.mti]! ^ (this.mt[this.mti + LAG1]! & MASK1);
+        z ^= TEMPERING_SHIFT_1(z);
+        z ^= TEMPERING_SHIFT_2(z);
+        z ^= (this.mt[this.mti + LAG2]! & MASK2);
+        this.mti++;
+        if(this.mti == numberN-numberM) this.genRandInt32 = this.case2;
+        return z;
+    }
 
-function case4(): bigint {
-    mt[mti] = mt[mti+(numberM-numberN)]! ^ twist(mt[mti]!,mt[mti+1]!);
-    let z: bigint = mt[mti]! ^ (mt[mti - LAG1over]! & MASK1);
-    z ^= TEMPERING_SHIFT_1(z);
-    z ^= TEMPERING_SHIFT_2(z);
-    z ^= (mt[mti - LAG2over]! & MASK2);
-    mti++;
-    if(mti==numberN-1)genRandInt32 = case5;
-    return z;
-}
+    private case2(): bigint {
+        this.mt[this.mti] = this.mt[this.mti+(numberM-numberN)]! ^ twist(this.mt[this.mti]!,this.mt[this.mti+1]!);
+        let z: bigint = this.mt[this.mti]! ^ (this.mt[this.mti + LAG1]! & MASK1);
+        z ^= TEMPERING_SHIFT_1(z);
+        z ^= TEMPERING_SHIFT_2(z);
+        z ^= (this.mt[this.mti + LAG2]! & MASK2);
+        this.mti++;
+        if(this.mti == LAG1over) this.genRandInt32 = this.case3;
+        return z;
+    }
 
-function case5(): bigint {
-    mt[numberN-1] = mt[numberM-1]! ^ twist(mt[numberN-1]!, mt[0]!);
-    let z: bigint = mt[mti]! ^ (mt[mti - LAG1over]! & MASK1);
-    z ^= TEMPERING_SHIFT_1(z);
-    z ^= TEMPERING_SHIFT_2(z);
-    z ^= (mt[mti - LAG2over]! & MASK2);
-    mti=0;
-    genRandInt32 = case1;
-    return z;
-}
+    private case3(): bigint {
+        this.mt[this.mti] = this.mt[this.mti+(numberM-numberN)]! ^ twist(this.mt[this.mti]!,this.mt[this.mti+1]!);
+        let z: bigint = this.mt[this.mti]! ^ (this.mt[this.mti - LAG1over]! & MASK1);
+        z ^= TEMPERING_SHIFT_1(z);
+        z ^= TEMPERING_SHIFT_2(z);
+        z ^= (this.mt[this.mti + LAG2]! & MASK2);
+        this.mti++;
+        if(this.mti == LAG2over) this.genRandInt32 = this.case4;
+        return z;
+    }
 
-export {};
+    private case4(): bigint {
+        this.mt[this.mti] = this.mt[this.mti+(numberM-numberN)]! ^ twist(this.mt[this.mti]!,this.mt[this.mti+1]!);
+        let z: bigint = this.mt[this.mti]! ^ (this.mt[this.mti - LAG1over]! & MASK1);
+        z ^= TEMPERING_SHIFT_1(z);
+        z ^= TEMPERING_SHIFT_2(z);
+        z ^= (this.mt[this.mti - LAG2over]! & MASK2);
+        this.mti++;
+        if(this.mti==numberN-1)this.genRandInt32 = this.case5;
+        return z;
+    }
+
+    private case5(): bigint {
+        this.mt[numberN-1] = this.mt[numberM-1]! ^ twist(this.mt[numberN-1]!, this.mt[0]!);
+        let z: bigint = this.mt[this.mti]! ^ (this.mt[this.mti - LAG1over]! & MASK1);
+        z ^= TEMPERING_SHIFT_1(z);
+        z ^= TEMPERING_SHIFT_2(z);
+        z ^= (this.mt[this.mti - LAG2over]! & MASK2);
+        this.mti=0;
+        this.genRandInt32 = this.case1;
+        return z;
+    }
+}
 
 // /* generates a random number on [0,0x7fffffff]-interval */
 // unsigned int genrand_int31(void)
