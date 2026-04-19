@@ -11,10 +11,9 @@ export default class CryptoBigIntRNG extends AbstractBigIntRNG {
 
         const length = Math.ceil(requestedNBits / 64);
 
-        const array = new BigUint64Array(length);
-        crypto.getRandomValues(array);
-
-        const numerator = array.reduce((prev, curr) => (prev << 64n) + curr);
+        // dont't keep the array referenced
+        const numerator = crypto.getRandomValues(new BigUint64Array(length))
+            .reduce((prev, curr) => (prev << 64n) + curr);
 
         const denominator = 2n ** (64n * BigInt(length));
 
