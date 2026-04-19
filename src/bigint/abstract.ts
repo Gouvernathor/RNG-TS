@@ -75,7 +75,7 @@ export default abstract class AbstractBigIntRNG {
             return this.uniform(resolution, b-a).add(a);
         }
 
-        return Fraction.fromPair(this.randRange(a * resolution), resolution);
+        return this.random(resolution).mul(a);
     }
 
     /**
