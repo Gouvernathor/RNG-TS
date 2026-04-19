@@ -1,4 +1,4 @@
-import { Fraction } from "@gouvernathor/fraction.ts";
+import { Fraction, FractionAble } from "@gouvernathor/fraction.ts";
 
 /**
  * TODO
@@ -66,8 +66,6 @@ export default abstract class AbstractBigIntRNG {
         return this.random(req).mul(req).floor();
     }
 
-    // TODO make a uniform taking fractions ?
-
     /**
      * @returns a Fraction in:
      * - [0, a[ if only one parameter is provided
@@ -77,9 +75,9 @@ export default abstract class AbstractBigIntRNG {
      * having the same probability of being emitted.
      * Arbitrarily large.
      */
-    uniform(resolution: bigint, a: bigint, b?: bigint): Fraction {
+    uniform(resolution: bigint, a: FractionAble, b?: FractionAble): Fraction {
         if (b !== undefined) {
-            return this.uniform(resolution, b-a).add(a);
+            return this.uniform(resolution, Fraction.fromAny(b).sub(a)).add(a);
         }
 
         return this.random(resolution).mul(a);
