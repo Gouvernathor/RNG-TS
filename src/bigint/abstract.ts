@@ -27,6 +27,12 @@ import { Fraction } from "@gouvernathor/fraction.ts";
  * as long as its value is in the expected range.
  */
 export default abstract class AbstractBigIntRNG {
+    /**
+     * This is the default resolution value passed to the random method.
+     * It defaults to 0, which is an invalid value.
+     * You must either set this value on the random object,
+     * or always pass an explicit resolution value when calling random.
+     */
     resolution: bigint = 0n;
 
     /**
@@ -60,7 +66,8 @@ export default abstract class AbstractBigIntRNG {
         return this.random(req).mul(req).floor();
     }
 
-    // TODO a version taking Fraction as inputs ?
+    // TODO make a uniform taking fractions ?
+
     /**
      * @returns a Fraction in:
      * - [0, a[ if only one parameter is provided
