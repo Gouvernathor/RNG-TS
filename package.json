@@ -11,6 +11,12 @@
                 "types": "./dist/RNG.d.ts",
                 "default": "./dist/RNG.js"
             }
+        },
+        "./bigint": {
+            "import": {
+                "types": "./dist/bigint/RNG.d.ts",
+                "default": "./dist/bigint/RNG.js"
+            }
         }
     },
     "files": [
