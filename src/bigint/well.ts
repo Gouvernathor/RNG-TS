@@ -81,9 +81,9 @@ class WellBigIntBase {
         this.genRandInt32 = this.case1;
     }
 
-    private case1(): bigint {
+    private case1() {
         this.mt[this.mti] = this.mt[this.mti+numberM]! ^ twist(this.mt[this.mti]!,this.mt[this.mti+1]!);
-        let z: bigint = this.mt[this.mti]! ^ (this.mt[this.mti + LAG1]! & MASK1);
+        let z = this.mt[this.mti]! ^ (this.mt[this.mti + LAG1]! & MASK1);
         z ^= TEMPERING_SHIFT_1(z);
         z ^= TEMPERING_SHIFT_2(z);
         z ^= (this.mt[this.mti + LAG2]! & MASK2);
@@ -92,9 +92,9 @@ class WellBigIntBase {
         return z;
     }
 
-    private case2(): bigint {
+    private case2() {
         this.mt[this.mti] = this.mt[this.mti+(numberM-numberN)]! ^ twist(this.mt[this.mti]!,this.mt[this.mti+1]!);
-        let z: bigint = this.mt[this.mti]! ^ (this.mt[this.mti + LAG1]! & MASK1);
+        let z = this.mt[this.mti]! ^ (this.mt[this.mti + LAG1]! & MASK1);
         z ^= TEMPERING_SHIFT_1(z);
         z ^= TEMPERING_SHIFT_2(z);
         z ^= (this.mt[this.mti + LAG2]! & MASK2);
@@ -103,9 +103,9 @@ class WellBigIntBase {
         return z;
     }
 
-    private case3(): bigint {
+    private case3() {
         this.mt[this.mti] = this.mt[this.mti+(numberM-numberN)]! ^ twist(this.mt[this.mti]!,this.mt[this.mti+1]!);
-        let z: bigint = this.mt[this.mti]! ^ (this.mt[this.mti - LAG1over]! & MASK1);
+        let z = this.mt[this.mti]! ^ (this.mt[this.mti - LAG1over]! & MASK1);
         z ^= TEMPERING_SHIFT_1(z);
         z ^= TEMPERING_SHIFT_2(z);
         z ^= (this.mt[this.mti + LAG2]! & MASK2);
@@ -114,9 +114,9 @@ class WellBigIntBase {
         return z;
     }
 
-    private case4(): bigint {
+    private case4() {
         this.mt[this.mti] = this.mt[this.mti+(numberM-numberN)]! ^ twist(this.mt[this.mti]!,this.mt[this.mti+1]!);
-        let z: bigint = this.mt[this.mti]! ^ (this.mt[this.mti - LAG1over]! & MASK1);
+        let z = this.mt[this.mti]! ^ (this.mt[this.mti - LAG1over]! & MASK1);
         z ^= TEMPERING_SHIFT_1(z);
         z ^= TEMPERING_SHIFT_2(z);
         z ^= (this.mt[this.mti - LAG2over]! & MASK2);
@@ -125,9 +125,9 @@ class WellBigIntBase {
         return z;
     }
 
-    private case5(): bigint {
+    private case5() {
         this.mt[numberN-1] = this.mt[numberM-1]! ^ twist(this.mt[numberN-1]!, this.mt[0]!);
-        let z: bigint = this.mt[this.mti]! ^ (this.mt[this.mti - LAG1over]! & MASK1);
+        let z = this.mt[this.mti]! ^ (this.mt[this.mti - LAG1over]! & MASK1);
         z ^= TEMPERING_SHIFT_1(z);
         z ^= TEMPERING_SHIFT_2(z);
         z ^= (this.mt[this.mti - LAG2over]! & MASK2);
