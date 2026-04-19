@@ -161,7 +161,7 @@ export function makeRandom({
         (resolution: bigint) =>
             resolution.toString(2).length;
 
-    return function random (this: AbstractBigIntRNG, resolution = this.resolution) {
+    return function random(this: AbstractBigIntRNG, resolution = this.resolution) {
         if (resolution <= 0n) {
             throw new Error("the resolution must be a strictly positive value");
         }
@@ -170,11 +170,10 @@ export function makeRandom({
 
         const numberOfNextCalls = Math.ceil(requestedNBits / numberBitsOfNext);
 
-        // call #next that number of times
-        const values = Array.from({ length: numberOfNextCalls }, next);
-
-        // concatenate the bigints' bytes, becoming the numerator
-        const numerator = values.reduce((prev, curr) => (prev << nBitsFromNext) + curr);
+        let numerator = 0n;
+        for (let i = 0; i < numberOfNextCalls; i++) {
+            numerator = (numerator << nBitsFromNext) + next();
+        }
 
         // the denominator is 2** (nBitsFromNext * the number of times #next was called)
         const denominator = 2n ** (nBitsFromNext * BigInt(numberOfNextCalls));
