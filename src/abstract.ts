@@ -47,19 +47,24 @@ export default abstract class AbstractRNG {
         return array[this.randRange(0, array.length)]!;
     }
 
+    *weightedIndexChoicesGenerator(weights: readonly number[]): Generator<number> {
+        let accu = 0;
+        const cumWeights = weights.map(w => (accu += w));
+        const maxCumWeight = cumWeights[cumWeights.length - 1]!;
+        while (true) {
+            const rand = this.uniform(maxCumWeight);
+            yield cumWeights.findIndex(w => w > rand);
+        }
+    }
+
     /**
      * Warning: this generator is infinite.
      * It reseeds at every generation.
      * The two parameters must be the same length.
      */
     *weightedChoicesGenerator<T>(array: readonly T[], weights: readonly number[]): Generator<T> {
-        let accu = 0;
-        const cumWeights = weights.map(w => (accu += w));
-        const maxCumWeight = cumWeights[cumWeights.length - 1]!;
-        while (true) {
-            const rand = this.uniform(maxCumWeight);
-            const idx = cumWeights.findIndex(w => w > rand);
-            yield array[idx]!;
+        for (const i of this.weightedIndexChoicesGenerator(weights)) {
+            yield array[i]!;
         }
     }
 
