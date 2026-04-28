@@ -47,6 +47,11 @@ export default abstract class AbstractRNG {
         return array[this.randRange(0, array.length)]!;
     }
 
+    /**
+     * Warning: this generator is infinite.
+     * It reseeds at every generation.
+     * Returns values between 0 (inclusive) and the length of the weights array (exclusive).
+     */
     *weightedIndexChoicesGenerator(weights: readonly number[]): Generator<number> {
         let accu = 0;
         const cumWeights = weights.map(w => (accu += w));
